@@ -7,7 +7,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('connected to MongoDB'))
     .catch(error => console.log('error connecting to MongoDB:', error.message))
 
-const PersonSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -15,11 +15,19 @@ const PersonSchema = new mongoose.Schema({
         unique: true
     },
     number: {
-        type: Number,
+        type: String,
         min: 8
     }
 })
 
-PersonSchema.plugin(uniqueValidator)
+personSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('Person', PersonSchema)
+personSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
+module.exports = mongoose.model('Person', personSchema)
