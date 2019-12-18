@@ -1,0 +1,16 @@
+    {
+		"name": "Arto Hellas",
+		"number": "040-123456"
+	},
+	{
+		"name": "Ada Lovelace",
+		"number": "040-98989766"
+	},
+	{
+		"name": "Dan Abramov",
+		"number": "040-296543"
+	},
+	{
+		"name": "Mary Poppendieck",
+		"number": "040-654321"
+	}

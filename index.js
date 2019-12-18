@@ -26,6 +26,9 @@ app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
+/**
+ * get all persons
+ */
 app.get('/api/persons', (req, res) => {
     Person.find({})
         .then(people => {
@@ -34,6 +37,89 @@ app.get('/api/persons', (req, res) => {
         .catch(error => console.log(error))
 })
 
+/**
+ * get single person
+ */
+app.get('/api/persons/:id', (req, res, next) => {
+    Person.findById(req.params.id)
+        .then(person => res.json(person.toJSON()))
+        .catch(error => next(error))
+})
+
+/**
+ * delete single person
+ */
+app.delete('/api/persons/:id', (req, res, next) => {
+    Person.findByIdAndDelete(req.params.id)
+        .then(result => {
+            console.log(`deleted`)
+            res.status(204).end()
+        })
+        .catch(error => next(error))
+})
+
+/**
+ * add a person
+ */
+app.post('/api/persons/', (req, res, next) => {
+    if (!req.body.name || !req.body.number) {
+        return res.status(400).json({ error: 'name and number are required' })
+    }
+
+    const person = new Person({
+        name: req.body.name,
+        number: req.body.number
+    })
+
+    person.save().then(savedPerson => {
+        res.json(savedPerson.toJSON())
+    })
+        .catch(error => next(error))
+})
+
+/**
+ * update person
+ */
+app.put('/api/persons/:id', (req, res, next) => {
+    const person = {
+        name: req.body.name,
+        number: req.body.number
+    }
+
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+        .then(updatedPerson => {
+            res.json(updatedPerson.toJSON())
+        })
+        .catch(error => next(error))
+})
+
+/**
+ * unknownEndpoint middleware
+ */
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+/**
+ * error handler
+ */
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError' && error.kind === 'ObjectId') {
+        return res.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
+/**
+ * run server
+ */
 app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`)
 })
