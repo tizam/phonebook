@@ -27,6 +27,16 @@ app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
+app.get('/info', (req, res) => {
+    const count = Person.estimatedDocumentCount({}, (error, c) => {
+        if (err) throw new Error({ error: error.message })
+
+        res.send(`<p>phonebook has info for ${c} people</p>
+            <p>${new Date()}</p>
+        `)
+    })
+})
+
 /**
  * get all persons
  */
