@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "fullstackopen phonebook app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,8 +13,12 @@
     "logs:prod": "heroku logs --tail",
     "lint": "eslint ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "fullstackopen",
+    "nodejs",
+    "api"
+  ],
+  "author": "Ladoui Abdellah",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
